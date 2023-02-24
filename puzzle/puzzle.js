@@ -45,7 +45,6 @@ function jatekotIndit() {
   let currentTime = Date.parse(new Date());
   deadline = new Date(currentTime + timeInMinutes * 60 * 1000);
   updateClock();
-  setInterval(updateClock, 1000);
   puzzleBetolt(nehezsegiFokozat);
 }
 
