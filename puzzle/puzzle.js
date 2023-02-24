@@ -54,7 +54,7 @@ function puzzleBetolt(params) {
   let eredetiKep = document.getElementById("mintakep");
   let kepArany = eredetiKep.clientWidth / (1.0 * eredetiKep.clientHeight);
   console.log(kepArany);
-  puzzle.style.gridTemplateColumns = "repeat(" + params + ", 1fr)";
+  puzzle.style.gridTemplateColumns = "repeat(" + params + ", fit-content("+100.0/nehezsegiFokozat+"%))";
 
   for (let index = 0; index < params * params; index++) {
     let element = document.createElement("img");
