@@ -34,7 +34,7 @@ img#mintakep {
     grid-template-areas:
         "inditogomb . ido"
         "minta minta minta"
-        "nehezseg . lepesszam";
+        "nehezseg kep lepesszam";
 }
 
 #clockdiv {
@@ -65,4 +65,7 @@ img#mintakep {
     padding: 5px;
     border: 1px solid lightgray;
     margin: 2vw;
+}
+#kepvalasztas {
+    grid-area: kep;
 }
