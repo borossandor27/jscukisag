@@ -9,7 +9,6 @@ function getTimeRemaining(deadline) {
   //const hours = Math.floor((total / (1000 * 60 * 60)) % 24);
   //const days = Math.floor(total / (1000 * 60 * 60 * 24));
   if (total < 0.0) {
-    console.log("minuszban: "+t+", "+timeinterval);
     clearInterval(timeinterval);
     timeinterval = null;
   }
