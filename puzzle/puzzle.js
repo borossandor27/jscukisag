@@ -32,11 +32,11 @@ btn.addEventListener("click", () => {
 
 selectElement.addEventListener("change", (event) => {
   nehezsegiFokozat = event.target.value;
-  eredetiKep.src = kivalasztottKep.value;
-  console.log(nehezsegiFokozat);
 });
 kivalasztottKep.addEventListener("change", (event) => {
-  eredetiKep.src = kivalasztottKep.value;
+  let obj = forrasKepek[kivalasztottKep.value];
+  let src =obj['src'];
+  eredetiKep.src = src;
 });
 
 function jatekotIndit() {
@@ -49,18 +49,31 @@ function jatekotIndit() {
   let currentTime = Date.parse(new Date());
   deadline = new Date(currentTime + timeInMinutes * 60 * 1000);
   updateClock();
-  kepeketBetolt(nehezsegiFokozat);
+  kepeketBetolt();
 }
 
-function kepeketBetolt(params) {
+function kepeketBetolt() {
   let puzzle = document.getElementById("puzzle");
   removeAllChildNodes(puzzle);
   let kepArany = eredetiKep.clientWidth / (1.0 * eredetiKep.clientHeight);
   console.log(kepArany);
   puzzle.style.gridTemplateColumns =
-    "repeat(" + params + ", fit-content(" + 100.0 / nehezsegiFokozat + "%))";
+    "repeat(" +
+    nehezsegiFokozat +
+    ", fit-content(" +
+    100.0 / nehezsegiFokozat +
+    "%))";
 
-  for (let index = 0; index < params * params; index++) {
+  for (const [key, value] of Object.entries(forrasKepek)) {
+    if (key === kivalasztottKep.value) {
+      console.log(`${key}: ${value} --- ${kivalasztottKep.value}`);
+      for (const [index, kiskep] of Object.entries(value)) {
+        console.log(`${index}: ${kiskep}`);
+      }
+    }
+  }
+
+  for (let index = 0; index < nehezsegiFokozat * nehezsegiFokozat; index++) {
     let element = document.createElement("img");
     element.id = index;
     element.className = "grid-item";
