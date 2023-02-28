@@ -8,7 +8,7 @@ var deadline = 0;
 var nehezsegiFokozat = 3;
 let timeinterval = null;
 
-var valasztottKep = [
+var kisKepek = [
   "mokus-0.png",
   "mokus-1.png",
   "mokus-2.png",
@@ -32,12 +32,18 @@ btn.addEventListener("click", () => {
 
 selectElement.addEventListener("change", (event) => {
   nehezsegiFokozat = event.target.value;
+  kisKepeketBetolt();
 });
 kivalasztottKep.addEventListener("change", (event) => {
-  let obj = forrasKepek[kivalasztottKep.value];
-  let src =obj['src'];
-  eredetiKep.src = src;
+  kisKepeketBetolt();
 });
+
+function kisKepeketBetolt() {
+  let obj = forrasKepek[kivalasztottKep.value];
+  let src = obj["src"];
+  eredetiKep.src = src;
+  kisKepek = obj["kepek"][nehezsegiFokozat];
+}
 
 function jatekotIndit() {
   btn.innerText = "Stop";
@@ -49,10 +55,10 @@ function jatekotIndit() {
   let currentTime = Date.parse(new Date());
   deadline = new Date(currentTime + timeInMinutes * 60 * 1000);
   updateClock();
-  kepeketBetolt();
+  kepeketFelrak();
 }
 
-function kepeketBetolt() {
+function kepeketFelrak() {
   let puzzle = document.getElementById("puzzle");
   removeAllChildNodes(puzzle);
   let kepArany = eredetiKep.clientWidth / (1.0 * eredetiKep.clientHeight);
@@ -64,38 +70,44 @@ function kepeketBetolt() {
     100.0 / nehezsegiFokozat +
     "%))";
 
-  for (const [key, value] of Object.entries(forrasKepek)) {
-    if (key === kivalasztottKep.value) {
-      console.log(`${key}: ${value} --- ${kivalasztottKep.value}`);
-      for (const [index, kiskep] of Object.entries(value)) {
-        console.log(`${index}: ${kiskep}`);
-      }
-    }
-  }
+  var imgSrcPath =
+    "./puzzle_kepek/" + nehezsegiFokozat + "x" + nehezsegiFokozat + "/";
+  // using Array map and Math.random
 
+  kisKepek = shuffle(kisKepek);
   for (let index = 0; index < nehezsegiFokozat * nehezsegiFokozat; index++) {
-    let element = document.createElement("img");
-    element.id = index;
-    element.className = "grid-item";
-    element.title = index;
-    element.src =
-      "./puzzle_kepek/" +
-      nehezsegiFokozat +
-      "x" +
-      nehezsegiFokozat +
-      "/" +
-      valasztottKep[index];
-    element.draggable = true;
-    element.addEventListener("dragstart", dragStart);
-    //element.addEventListener("drag", drag);
-    //element.addEventListener("dragend", dragEnd);
-
-    //element.addEventListener("dragenter", dragEnter);
-    element.addEventListener("dragover", dragOver);
-    //element.addEventListener("dragleave", dragLeave);
-    element.addEventListener("drop", drop);
-    puzzle.appendChild(element);
+    puzzle.appendChild(kisKepDiv(index, imgSrcPath));
   }
+}
+/**
+ * Shuffles array in place. ES6 version
+ * @param {Array} a items An array containing the items.
+ */
+function shuffle(a) {
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+function kisKepDiv(index, imgSrcPath) {
+  let element = document.createElement("img");
+  element.id = index;
+  element.className = "grid-item";
+  element.title = index;
+  element.alt = "valami";
+  element.src = imgSrcPath + kisKepek[index];
+
+  element.draggable = true;
+  element.addEventListener("dragstart", dragStart);
+  //element.addEventListener("drag", drag);
+  //element.addEventListener("dragend", dragEnd);
+
+  //element.addEventListener("dragenter", dragEnter);
+  element.addEventListener("dragover", dragOver);
+  //element.addEventListener("dragleave", dragLeave);
+  element.addEventListener("drop", drop);
+  return element;
 }
 function dragStart(event) {
   event.dataTransfer.clearData();
